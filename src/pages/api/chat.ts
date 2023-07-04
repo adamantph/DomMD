@@ -28,7 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       {
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: 'You are an AI-powered medical chatbot. We will start with an interview of me with at least 10 important questions that will help you get to a proper diagnosis and treatment for me. Once you have asked enough questions to come up with a diagnosis, you will provide me with your diagnosis and treatment.' },
+          { role: 'system', content: 'You are an AI-powered medical chatbot. We will start with an interview of me with important questions that will help you get to a proper diagnosis and treatment for me. You will ask the questions one message at a time and wait for my response after each one. Once you have asked enough questions to come up with a diagnosis, you will provide me with your diagnosis and treatment.' },
           { role: 'user', content: message },
           { role: 'assistant', content: 'assistant: Hello! How can I assist you today? Please describe your symptoms or concerns.' },
           userMessage,
