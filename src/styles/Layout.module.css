@@ -1,0 +1,39 @@
+.main{
+    height: 100vh;
+    max-height: 100vh;
+    width: 100vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    background-color: rgb(65, 61, 61);
+    color: white;
+}
+.header h1{
+    font-size: 25px;
+    font-weight: 700;
+}
+.body{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.footer{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    background-color: rgb(65, 61, 61);
+    color: white;
+}

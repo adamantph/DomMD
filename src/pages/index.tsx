@@ -1,11 +1,12 @@
 import Page from '../layouts/page';
 import Link from 'next/link';
 import 'tailwindcss/tailwind.css';
+import style from "../styles/Index.module.css"
 
 const Home = () => {
   return (
     <Page>
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+      <div className={style.index}>
         <h1 className="text-2xl mb-4">Welcome to the AI Doctor Chatbot!</h1>
         <p className="mb-4">
           This chatbot uses AI to provide general health information based on your symptoms. Please note that this chatbot does not replace a consultation with a healthcare professional and is intended to be used for informational purposes only.
