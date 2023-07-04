@@ -1,4 +1,4 @@
-import Page from '../src/app/page';
+import Page from '../layouts/page';
 import Link from 'next/link';
 import 'tailwindcss/tailwind.css';
 
@@ -14,7 +14,7 @@ const Home = () => {
       </div>
       <div className="mt-10 text-center">
         <h2 className="text-xl mb-2">How to Use the AI Doctor Chatbot</h2>
-        <p className="mb-2">1. Click the "Start Chat" button to begin.</p>
+        <p className="mb-2">1. Click the &quot;Start Chat&quot; button to begin.</p>
         <p className="mb-2">2. Describe your symptoms in as much detail as possible.</p>
         <p className="mb-2">3. The chatbot will provide general health information based on your symptoms.</p>
         <p className="mb-2">4. If necessary, consult a healthcare professional for further advice.</p>
