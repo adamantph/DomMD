@@ -12,12 +12,12 @@ const Page = ({ children }: PageProps) => {
       <header className={style.header}>
         <h1 >AskDom AI Doctor</h1>
         <nav>
-          <Link href="/chat">Chat</Link>
+        <Link href="/">Home</Link>  <Link href="/chat">Chat</Link>
         </nav>
       </header>
       <main className={style.body}>{children}</main>
       <footer className={style.footer}>
-        <p>© {new Date().getFullYear()} DomMD AI Doctor</p>
+        <p>© {new Date().getFullYear()} AskDom AI Doctor</p>
       </footer>
     </div>
   );
