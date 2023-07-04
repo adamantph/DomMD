@@ -18,6 +18,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const { message } = req.body;
 
+  // Input validation
+  if (typeof message !== 'string' || message.trim() === '') {
+    return res.status(400).json({ message: 'Invalid input: message must be a non-empty string' });
+  }
+
   try {
     // Prepare user message
     const userMessage = { role: 'user', content: message };
@@ -28,7 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       {
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: 'You are an AI-powered medical chatbot. We will start with an interview of me with important questions that will help you get to a proper diagnosis and treatment for me. You will ask the questions one message at a time and wait for my response after each one. Once you have asked enough questions to come up with a diagnosis, you will provide me with your diagnosis and treatment.' },
+          { role: 'system', content: 'You are an AI-powered medical chatbot. After asking a few questions about symptoms, you should be able to make a diagnosis and suggest a treatment.' },
           { role: 'user', content: message },
           { role: 'assistant', content: 'assistant: Hello! How can I assist you today? Please describe your symptoms or concerns.' },
           userMessage,
@@ -58,9 +63,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     };
 
     return res.status(200).json(chatbotResponseWithInfo);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error calling OpenAI GPT API:', error);
-    return res.status(500).json({ message: 'Error generating chatbot response' });
+    // Improved error handling
+    if (error.response && error.response.data) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      return res.status(500).json({ message: `Error generating chatbot response: ${error.response.data.error}` });
+    } else if (error.request) {
+      // The request was made but no response was received
+      return res.status(500).json({ message: 'Chatbot service is currently unavailable' });
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      return res.status(500).json({ message: `Error generating chatbot response: ${error.message}` });
+    }
   }
 };
 
