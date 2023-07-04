@@ -7,7 +7,8 @@ const Home = () => {
   return (
     <Page>
       <div className={style.index}>
-        <h1 className="text-2xl mb-4">Welcome to the AI Doctor Chatbot!</h1>
+        <h1 className="text-2xl mb-4">Welcome to AskDom !</h1>
+        <h1 className="text-2xl mb-4">Your AI Medical Chat Bot</h1>
         <p className="mb-4">
           This chatbot uses AI to provide general health information based on your symptoms. Please note that this chatbot does not replace a consultation with a healthcare professional and is intended to be used for informational purposes only.
         </p>

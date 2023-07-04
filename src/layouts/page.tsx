@@ -10,7 +10,7 @@ const Page = ({ children }: PageProps) => {
   return (
     <div className={style.main}>
       <header className={style.header}>
-        <h1 >DomMD AI Doctor</h1>
+        <h1 >AskDom AI Doctor</h1>
         <nav>
           <Link href="/chat">Chat</Link>
         </nav>

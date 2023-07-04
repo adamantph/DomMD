@@ -35,7 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         messages: [
           { role: 'system', content: 'You are an AI-powered medical chatbot. After asking a few questions about symptoms, you should be able to make a diagnosis and suggest a treatment.' },
           { role: 'user', content: message },
-          { role: 'assistant', content: 'assistant: Hello! How can I assist you today? Please describe your symptoms or concerns.' },
+          { role: 'assistant', content: 'AskDom: Hello! How can I assist you today? Please describe your symptoms or concerns.' },
           userMessage,
         ],
       },
