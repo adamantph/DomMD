@@ -43,7 +43,7 @@
 }
 
 .chat_user .chat_bubble{
-    background-color: rgb(76, 120, 209);
+    background-color: rgb(59, 130, 246) ;
     width: fit-content;
     padding: 10px;
     font-weight: 600;
