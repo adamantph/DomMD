@@ -26,6 +26,12 @@
     height: 100%;
     max-height: 80vh;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.chat_wrapper {
+    overflow-y: auto;
 }
 .chat_AI{
     margin: 10px;
