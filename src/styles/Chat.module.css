@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+
 .chat{
     height: 100%;
     width: 100%;
@@ -5,13 +9,15 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    background-color: rgb(167, 167, 167);
+    background-color: rgb(241, 241, 241);
     position: relative;
 }
 .chat_input{
     width: 100%;
+    font-family: 'Montserrat', sans-serif;
     padding: 10px;
     display: flex;
+    color:rgb(33, 33, 33);
     flex-direction: row;
     /* position: absolute;
     bottom: 10px; */
@@ -46,7 +52,7 @@
     justify-content: flex-start;
 }
 .chat_AI .chat_bubble{
-    background-color: rgb(112, 195, 112);
+    background-color: rgb(255, 255, 255);
     width: fit-content;
     padding: 10px;
     font-weight: 600;
@@ -55,7 +61,7 @@
 }
 
 .chat_user .chat_bubble{
-    background-color: rgb(59, 130, 246) ;
+    background-color: rgb(173, 216, 230) ;
     width: fit-content;
     padding: 10px;
     font-weight: 600;
