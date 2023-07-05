@@ -18,6 +18,7 @@ const Page = ({ children }: PageProps) => {
       <main className={style.body}>{children}</main>
       <footer className={style.footer}>
         <p>© {new Date().getFullYear()} AskDom AI Doctor</p>
+        <p>Powered by GPT 3.5-Turbo</p>
       </footer>
     </div>
   );
