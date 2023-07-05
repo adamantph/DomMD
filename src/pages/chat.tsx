@@ -10,6 +10,7 @@ const Chat = () => {
   }
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<messageFormat[]>([]);
+  const [chatDisabled,setChatDisabled] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   
@@ -24,10 +25,13 @@ const Chat = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    let userMessage = message
-    setMessages((prevMessages) => [...prevMessages, { sender: "user", message: userMessage }]);
+    setChatDisabled(true)
+    setMessages((prevMessages) => [...prevMessages, { sender: "user", message: message }]);
+    let previousMessages = [...messages, { sender: "user", message: message }]
+    setMessages((prevMessages) => [...prevMessages, { sender: "load", message: 'AskDom is thinking ...' }]);
 
     scrollToLast();
+    setMessage('');
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: {
@@ -37,13 +41,15 @@ const Chat = () => {
     });
 
     const data = await response.json();
-
+    
+    setMessages((prevMessages) => prevMessages.slice(0, -1));
     setMessages((prevMessages) => [...prevMessages, { sender: "AI", message: data.response }]);
 
-    setMessage('');
     scrollToLast();
     scrollToLast();
     scrollToLast();
+    
+    setChatDisabled(false)
   };
 
   return (
@@ -62,18 +68,36 @@ const Chat = () => {
             ))}
           </div>
         </div>
-        <form onSubmit={handleSubmit} className={style.chat_input}>
-          <input
-            type="text"
-            value={message}
-            onChange={handleChange}
-            className={style.chat_input_box}
-            defaultValue=''
-            placeholder='Ask'
-          />
-          <button type="submit" className="p-2 bg-blue-500 text-white rounded">
-            Send
-          </button>
+        <form onSubmit={handleSubmit} className={style.chat_input} >
+          {
+            chatDisabled ? 
+            <>             
+              <input
+                type="text"
+                value={message}
+                onChange={handleChange}
+                className={style.chat_input_box_disabled}
+                placeholder='Please wait...'
+                disabled
+              />
+              <button type="submit" className="p-2 bg-gray-400 text-white rounded" disabled>
+                Send
+              </button>
+            </>
+            :
+            <>
+              <input
+                type="text"
+                value={message}
+                onChange={handleChange}
+                className={style.chat_input_box}
+                placeholder='Ask'
+              />
+              <button type="submit" className="p-2 bg-blue-500 text-white rounded">
+                Send
+              </button>
+            </>
+          }
         </form>
       </div>
     </Page>

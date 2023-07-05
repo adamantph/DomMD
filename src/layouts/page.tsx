@@ -11,8 +11,9 @@ const Page = ({ children }: PageProps) => {
     <div className={style.main}>
       <header className={style.header}>
         <h1 >AskDom AI Doctor</h1>
-        <nav>
-        <Link href="/">Home</Link>  <Link href="/chat">Chat</Link>
+        <nav className={style.links}>
+        <Link href="/">Home</Link> 
+        <Link href="/chat">Chat</Link>
         </nav>
       </header>
       <main className={style.body}>{children}</main>

@@ -41,3 +41,8 @@
     background-color: rgb(13, 37, 63);
     color: white;
 }
+.links{
+    width: 150px;
+    display: flex;
+    justify-content: space-evenly;
+}
