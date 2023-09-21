@@ -5,8 +5,11 @@ import style from "../styles/Index.module.css";
 const Login = () => {
 
   return (
-   <div className={style.loading}>
-   </div>
+    <div className={style.main}>
+      
+      <div className={style.loading}>
+      </div>
+    </div>
   );
 };
 
