@@ -1,12 +1,15 @@
+import { ReactNode } from 'react';
 import Page from '../layouts/page';
 import Link from 'next/link';
 import style from "../styles/Index.module.css";
-
-const Login = () => {
+interface PageProps {
+  children: ReactNode;
+}
+const Login = ({ children }: PageProps) => {
 
   return (
-    <div className={style.main}>
-      
+    <div className={style.loading_container}>
+      {children}
       <div className={style.loading}>
       </div>
     </div>

@@ -3,18 +3,14 @@ import Link from 'next/link';
 import 'tailwindcss/tailwind.css';
 import style from "../styles/Index.module.css";
 import { useSession, signIn, signOut } from 'next-auth/react';
+import { useEffect } from 'react';
+import router from 'next/router';
 
 const Login = () => {
   //Data is used to see the signed in goolge user.
   //If undefined, it means it's still loading.
   //If null, it means no user is signed in.
-	const { data, status } = useSession();
-  if (status === 'authenticated') {
-		console.log(data)
-		
-	}else{
-    console.log(data)
-  }
+
 
   return (
     <div className={style.main} >
