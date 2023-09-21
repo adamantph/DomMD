@@ -2,8 +2,18 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Page from '../layouts/page';
 import style from "../styles/Chat.module.css"
 import 'tailwindcss/tailwind.css';
+import { useSession } from 'next-auth/react';
+import router from 'next/router';
 
 const Chat = () => {
+
+  const { data, status } = useSession();
+  useEffect(()=>{
+    if (status !== 'authenticated') {
+      router.push('/')
+    }
+  })
+  
   interface messageFormat {
     sender: string,
     message: string
