@@ -5,7 +5,7 @@ import 'tailwindcss/tailwind.css';
 import { useSession } from 'next-auth/react';
 import router from 'next/router';
 
-const Chat = () => {
+const ChatHistory = () => {
   const [conversationID, setConversationID] = useState('');
   const [userEmail, setUserEmail] = useState('');
 
@@ -16,7 +16,7 @@ const Chat = () => {
     }
   })
 
-  //Generate conversationID and set user's Email
+  //Set conversationID and user's Email
   useEffect(() => {
     if(conversationID == ''){
 
@@ -61,7 +61,7 @@ const Chat = () => {
 
     //Add user query messages
     setMessages((prevMessages) => [...prevMessages, { sender: "user", message: message }]);
-    // let previousMessages = [...messages, { sender: "user", message: message }]
+    let previousMessages = [...messages, { sender: "user", message: message }]
     setMessages((prevMessages) => [...prevMessages, { sender: "load", message: 'AskDom is thinking ...' }]);
 
     //Store the message
@@ -152,4 +152,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default ChatHistory;
