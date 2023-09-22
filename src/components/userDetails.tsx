@@ -13,8 +13,8 @@ const UserDetails = () => {
 
   const [emailRef, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [countryC, setCountry] = useState("Afghanistan");
-  const [phonePrefix, setPhonePrefix] = useState("+93");
+  const [countryC, setCountry] = useState("Philippines");
+  const [phonePrefix, setPhonePrefix] = useState("+63");
   const phoneRef = useRef<HTMLInputElement | null>(null);
   const cityRef = useRef<HTMLInputElement | null>(null);
   const addressRef = useRef<HTMLInputElement | null>(null);
@@ -115,6 +115,7 @@ const UserDetails = () => {
                 className={style.login_form_address}
                 value={countryC}
                 onChange={(e) => getPhonePrefix(e.target.value)}
+                disabled = {true}
               >
                 {countryCodes.map((countryCode, index) => (
                   <option key={index} value={countryCode.country}>

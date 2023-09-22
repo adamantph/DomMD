@@ -9,7 +9,7 @@ const Login = ({ children }: PageProps) => {
 
   return (
     <div className={style.loading_container}>
-      {children}
+      <div className={style.loading_children}>{children}</div>
       <div className={style.loading}>
       </div>
     </div>
