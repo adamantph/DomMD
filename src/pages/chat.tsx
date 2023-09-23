@@ -78,7 +78,7 @@ const Chat = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message: fullMessage }),  // Use the concatenated message
+      body: JSON.stringify({ userEmail, message: fullMessage }),  // Use the concatenated message
     });
 
     const data = await response.json();

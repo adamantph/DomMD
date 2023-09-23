@@ -16,6 +16,7 @@ const Page = ({ children }: PageProps) => {
         <nav className={style.links}>
         <Link href="/">Home</Link> 
         <Link href="/chat">Chat</Link>
+        <Link href="/history">History</Link>
         <button onClick={()=> signOut()}>Log Out</button>
         </nav>
       </header>
