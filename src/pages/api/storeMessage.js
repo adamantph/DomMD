@@ -7,6 +7,10 @@ export default async function handler(request, response) {
     }
 
     const {sender, message, userEmail, conversationID} = request.body;
+    // Check if conversationID is valid
+    if (!conversationID) {
+        return response.status(400).json({ error: "Invalid conversationID" });
+    }   
 
     const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
     const date = new Date();
