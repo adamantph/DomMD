@@ -6,7 +6,10 @@ import { useSession } from 'next-auth/react';
 import router from 'next/router';
 
 const Chat = () => {
-  const [conversationID, setConversationID] = useState('');
+  // Generate a unique conversationID if not already set
+  const [conversationID, setConversationID] = useState(() => {
+    return Math.random().toString(36).substr(2, 9);
+  });
   const [userEmail, setUserEmail] = useState('');
 
   const { data, status } = useSession();
@@ -17,20 +20,10 @@ const Chat = () => {
   });
 
   useEffect(() => {
-    if (conversationID == '') {
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-      let result = '';
-      for (let i = 0; i < 5; i++) {
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        result += characters[randomIndex];
-      }
-      setConversationID(result);
-    }
-
     if (data?.user?.email) {
       setUserEmail(data.user.email);
     }
-  }, [conversationID, data]);
+  }, [data]);
 
   interface messageFormat {
     sender: string,
@@ -54,15 +47,14 @@ const Chat = () => {
     event.preventDefault();
     setChatDisabled(true);
 
-  // Fetch the chat history for the given conversationID and userEmail
-  const chatHistoryResponse = await fetch(`/api/fetchChatHistory`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userEmail, conversationID }),
-  });
-  const chatHistoryData = await chatHistoryResponse.json();
-  const previousMessages = chatHistoryData && Array.isArray(chatHistoryData.history) ? chatHistoryData.history : [];
-
+    // Fetch the chat history for the given conversationID and userEmail
+    const chatHistoryResponse = await fetch(`/api/fetchChatHistory`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userEmail, conversationID }),
+    });
+    const chatHistoryData = await chatHistoryResponse.json();
+    const previousMessages = chatHistoryData && Array.isArray(chatHistoryData.history) ? chatHistoryData.history : [];
 
     // Concatenate chat history with the current message
     const fullMessage = previousMessages.map((msg: messageFormat) => `${msg.sender}: ${msg.message}`).join('\n') + `\nUser: ${message}`;
