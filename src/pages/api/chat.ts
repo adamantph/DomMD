@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import { extractDiagnoses, extractTreatments, extractDoctors } from './helper';
+import { sql } from '@vercel/postgres';
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
@@ -23,16 +24,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(400).json({ message: 'Invalid input: message must be a non-empty string' });
   }
 
-  // Fetch recent chat history (Replace with your actual database query method)
-  const history = YOUR_DATABASE_QUERY_METHOD(`
-    SELECT chathistory FROM users
-    WHERE email = ${userEmail}
-  `);
+// Fetch recent chat history
+const user = await sql`SELECT * FROM users WHERE email = ${userEmail}`;
+const prevHistory = user.rows[0].chathistory;
+const chatHistoryForConversation = (prevHistory && prevHistory[conversationID]) ? prevHistory[conversationID] : [];
 
-  // Extract chat messages for the given conversationID from the history
-  const chatHistoryForConversation = history[conversationID] || [];
-  const fullMessage = chatHistoryForConversation.map(row => `${row.role}: ${row.content}`).join('\n') + `\nUser: ${message}`;
-
+// Ensure chatHistoryForConversation is an array and has the expected structure
+const validHistory = Array.isArray(chatHistoryForConversation) ? chatHistoryForConversation : [];
+const fullMessage = validHistory.map(row => `${row.from || 'Unknown'}: ${row.content || ''}`).join('\n') + `\nUser: ${message}`;
   try {
     // Make a request to the OpenAI GPT API to generate the response
     const response = await axios.post(

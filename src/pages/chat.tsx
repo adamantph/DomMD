@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Page from '../layouts/page';
-import style from "../styles/Chat.module.css"
+import style from "../styles/Chat.module.css";
 import 'tailwindcss/tailwind.css';
 import { useSession } from 'next-auth/react';
 import router from 'next/router';
@@ -12,29 +12,25 @@ const Chat = () => {
   const { data, status } = useSession();
   useEffect(() => {
     if (status !== 'authenticated') {
-      router.push('/')
+      router.push('/');
     }
-  })
+  });
 
-  //Generate conversationID and set user's Email
   useEffect(() => {
-    if(conversationID == ''){
-
+    if (conversationID == '') {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    
       let result = '';
       for (let i = 0; i < 5; i++) {
-          const randomIndex = Math.floor(Math.random() * characters.length);
-          result += characters[randomIndex];
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters[randomIndex];
       }
-      setConversationID(result)
+      setConversationID(result);
     }
 
     if (data?.user?.email) {
-      // console.log(data.user.email)
       setUserEmail(data.user.email);
     }
-  },[conversationID,data])
+  }, [conversationID, data]);
 
   interface messageFormat {
     sender: string,
@@ -44,7 +40,6 @@ const Chat = () => {
   const [messages, setMessages] = useState<messageFormat[]>([]);
   const [chatDisabled, setChatDisabled] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-
 
   const scrollToLast = () => {
     const lastChildElement = chatContainerRef.current?.lastElementChild;
@@ -57,47 +52,58 @@ const Chat = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setChatDisabled(true)
+    setChatDisabled(true);
 
-    //Add user query messages
-    setMessages((prevMessages) => [...prevMessages, { sender: "user", message: message }]);
-    // let previousMessages = [...messages, { sender: "user", message: message }]
+  // Fetch the chat history for the given conversationID and userEmail
+  const chatHistoryResponse = await fetch(`/api/fetchChatHistory`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userEmail, conversationID }),
+  });
+  const chatHistoryData = await chatHistoryResponse.json();
+  const previousMessages = chatHistoryData && Array.isArray(chatHistoryData.history) ? chatHistoryData.history : [];
+
+
+    // Concatenate chat history with the current message
+    const fullMessage = previousMessages.map((msg: messageFormat) => `${msg.sender}: ${msg.message}`).join('\n') + `\nUser: ${message}`;
+
+    // Add user query messages
+    setMessages((prevMessages) => [...prevMessages, { sender: "user", message: fullMessage }]);
     setMessages((prevMessages) => [...prevMessages, { sender: "load", message: 'AskDom is thinking ...' }]);
 
-    //Store the message
+    // Store the user's message
     fetch(`/api/storeMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({userEmail, sender : "user",message,conversationID}),
-    })
+      body: JSON.stringify({ userEmail, sender: "user", message: fullMessage, conversationID }),
+    });
 
     scrollToLast();
     setMessage('');
+
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message: fullMessage }),  // Use the concatenated message
     });
 
     const data = await response.json();
 
-    //Add chatbot response messages
+    // Add chatbot response messages
     setMessages((prevMessages) => prevMessages.slice(0, -1));
     setMessages((prevMessages) => [...prevMessages, { sender: "AI", message: data.response }]);
 
-    //Store the message
+    // Store the chatbot's response
     fetch(`/api/storeMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({userEmail, sender : "AI",message : data.response,conversationID }),
-    })
-    scrollToLast();
-    scrollToLast();
-    scrollToLast();
+      body: JSON.stringify({ userEmail, sender: "AI", message: data.response, conversationID }),
+    });
 
-    setChatDisabled(false)
+    scrollToLast();
+    setChatDisabled(false);
   };
 
   return (
@@ -105,9 +111,7 @@ const Chat = () => {
       <div className={style.chat}>
         <div className={style.chat_container}>
           <div className={style.chat_wrapper} ref={chatContainerRef}>
-
             {messages.map((message, index) => (
-
               <div key={index} className={style[`chat_${message.sender}`]}>
                 <div className={style.chat_bubble}>
                   {message.message}
@@ -116,7 +120,7 @@ const Chat = () => {
             ))}
           </div>
         </div>
-        <form onSubmit={handleSubmit} className={style.chat_input} >
+        <form onSubmit={handleSubmit} className={style.chat_input}>
           {
             chatDisabled ?
               <>
@@ -139,7 +143,7 @@ const Chat = () => {
                   value={message}
                   onChange={handleChange}
                   className={style.chat_input_box}
-                  placeholder='Ask'
+                  placeholder='Type your message...'
                 />
                 <button type="submit" className="p-2 bg-blue-500 text-white rounded">
                   Send
