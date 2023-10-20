@@ -57,7 +57,7 @@ const Chat = () => {
     const previousMessages = chatHistoryData && Array.isArray(chatHistoryData.history) ? chatHistoryData.history : [];
 
     // Concatenate chat history with the current message
-    const fullMessage = previousMessages.map((msg: messageFormat) => `${msg.sender}: ${msg.message}`).join('\n') + `\nUser: ${message}`;
+    const fullMessage = previousMessages.map((msg: messageFormat) => `${msg.sender}: ${msg.message}`).join('\n') + `\n${message}`;
 
     // Add user query messages
     setMessages((prevMessages) => [...prevMessages, { sender: "user", message: fullMessage }]);

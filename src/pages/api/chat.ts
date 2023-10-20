@@ -31,7 +31,7 @@ const chatHistoryForConversation = (prevHistory && prevHistory[conversationID]) 
 
 // Ensure chatHistoryForConversation is an array and has the expected structure
 const validHistory = Array.isArray(chatHistoryForConversation) ? chatHistoryForConversation : [];
-const fullMessage = validHistory.map(row => `${row.from || 'Unknown'}: ${row.content || ''}`).join('\n') + `\nUser: ${message}`;
+const fullMessage = validHistory.map(row => `${row.from || 'Unknown'}: ${row.content || ''}`).join('\n') + `\n${message}`;
   try {
     // Make a request to the OpenAI GPT API to generate the response
     const response = await axios.post(
@@ -81,3 +81,15 @@ const fullMessage = validHistory.map(row => `${row.from || 'Unknown'}: ${row.con
 };
 
 export default handler;
+
+// CREATE TABLE users (
+//   email VARCHAR UNIQUE NOT NULL,
+//   name VARCHAR(100),
+//   country VARCHAR(50),
+//   city VARCHAR(50),
+//   address VARCHAR(255),
+//   phone VARCHAR(20),
+//   isVerified BOOLEAN,
+//   dateAdded VARCHAR(50),
+//   chatHistory VARCHAR
+// );
