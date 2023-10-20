@@ -12,37 +12,60 @@ interface ChatbotResponse {
   doctors: string[];
 }
 
+function convertToMessagesArray(inputArray : [], fullMessage : string) {
+	// Convert the input array to the desired format
+	const messages = inputArray.map((item : any )=> ({
+	  role: item.sender.toLowerCase(),
+	  content: item.message
+	}));
+  
+	// Insert the system message at the start
+	messages.unshift({
+	  role: 'system',
+	  content: 'You are a medical assistant chatbot designed to gather patient history and provide potential diagnoses.'
+	});
+  
+	// Append the user message at the end
+	messages.push({
+	  role: 'user',
+	  content: fullMessage
+	});
+  
+	return messages;
+  }
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { message, userEmail, conversationID } = req.body;
-
+  const { message,messages, userEmail, conversationID } = req.body;
+  console.log(messages,message)
   // Input validation
   if (typeof message !== 'string' || message.trim() === '') {
     return res.status(400).json({ message: 'Invalid input: message must be a non-empty string' });
   }
 
-// Fetch recent chat history
-const user = await sql`SELECT * FROM users WHERE email = ${userEmail}`;
-const prevHistory = user.rows[0].chathistory;
-const chatHistoryForConversation = (prevHistory && prevHistory[conversationID]) ? prevHistory[conversationID] : [];
+  // Fetch recent chat history
+  const user = await sql`SELECT * FROM users WHERE email = ${userEmail}`;
+  const prevHistory = user.rows[0].chathistory;
+  const chatHistoryForConversation = (prevHistory && prevHistory[conversationID]) ? prevHistory[conversationID] : [];
 
-// Ensure chatHistoryForConversation is an array and has the expected structure
-const validHistory = Array.isArray(chatHistoryForConversation) ? chatHistoryForConversation : [];
-const fullMessage = validHistory.map(row => `${row.from || 'Unknown'}: ${row.content || ''}`).join('\n') + `\n${message}`;
+  // Ensure chatHistoryForConversation is an array and has the expected structure
+  const validHistory = Array.isArray(chatHistoryForConversation) ? chatHistoryForConversation : [];
+  const fullMessage = validHistory.map(row => `${row.from || 'Unknown'}: ${row.content || ''}`).join('\n') + `${message}`;
+
   try {
     // Make a request to the OpenAI GPT API to generate the response
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
         model: 'gpt-4',
-        messages: [
-          { role: 'system', content: 'You are a medical assistant chatbot designed to gather patient history and provide potential diagnoses.' },
-          { role: 'user', content: fullMessage },
-          { role: 'assistant', content: 'AskDom: Hello! How can I assist you today? Please describe your symptoms or concerns.' },
-        ],
+        // messages: [
+        //   { role: 'system', content: 'You are a medical assistant chatbot designed to gather patient history and provide potential diagnoses.' },
+        //   { role: 'user', content: fullMessage },
+        //   { role: 'assistant', content: 'Hello! How can I assist you today? Please describe your symptoms or concerns.' },
+        // ],
+		messages : convertToMessagesArray(messages,message)
       },
       {
         headers: {

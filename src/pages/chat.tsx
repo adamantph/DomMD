@@ -57,7 +57,7 @@ const Chat = () => {
     const previousMessages = chatHistoryData && Array.isArray(chatHistoryData.history) ? chatHistoryData.history : [];
 
     // Concatenate chat history with the current message
-    const fullMessage = previousMessages.map((msg: messageFormat) => `${msg.sender}: ${msg.message}`).join('\n') + `\n${message}`;
+    const fullMessage = previousMessages.map((msg: messageFormat) => `${msg.sender}: ${msg.message}`).join('\n') + `${message}`;
 
     // Add user query messages
     setMessages((prevMessages) => [...prevMessages, { sender: "user", message: fullMessage }]);
@@ -78,20 +78,20 @@ const Chat = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userEmail, message: fullMessage }),  // Use the concatenated message
+      body: JSON.stringify({ userEmail, message: fullMessage ,messages:messages}),  // Use the concatenated message
     });
 
     const data = await response.json();
 
     // Add chatbot response messages
     setMessages((prevMessages) => prevMessages.slice(0, -1));
-    setMessages((prevMessages) => [...prevMessages, { sender: "AI", message: data.response }]);
+    setMessages((prevMessages) => [...prevMessages, { sender: "assistant", message: data.response }]);
 
     // Store the chatbot's response
     fetch(`/api/storeMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userEmail, sender: "AI", message: data.response, conversationID }),
+      body: JSON.stringify({ userEmail, sender: "assistant", message: data.response, conversationID }),
     });
 
     scrollToLast();
