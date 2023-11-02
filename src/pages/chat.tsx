@@ -99,29 +99,38 @@ const Chat = () => {
 	};
 
 	function formatTextToJSXParagraphs(inputText: string) {
-		// Split the text by new lines
 		const paragraphs = inputText.split('\n');
 
-		// Map each paragraph to a JSX <p> element
+		// Function to process text for bold and italics
+		const processText = (text : string, key : any) => {
+			// Split the text by ** for bold and * for italics
+			return text.split(/(\*\*[^*]+\*\*)|(\*[^*]+\*)/g).map((part, index) => {
+				if (!part) return null; // Filter out empty strings
+				// Check for bold text surrounded by **
+				if (/^\*\*(.*)\*\*$/.test(part)) {
+					return <span key={`${key}-b-${index}`} style={{ fontWeight: 'bold' }}>{part.slice(2, -2)}</span>;
+				}
+				// Check for italic text surrounded by *
+				if (/^\*(.*)\*$/.test(part)) {
+					return <span key={`${key}-i-${index}`} style={{ fontStyle: 'italic' }}>{part.slice(1, -1)}</span>;
+				}
+				// Return the text as is if it's not bold or italic
+				return part;
+			});
+		};
+
+		// Map each paragraph to a JSX <p> element with formatted text
 		const paragraphElements = paragraphs.map((paragraph, pIndex) => {
-		  // Split the paragraph by ** and check for bold text
-		  const parts = paragraph.split(/(\*\*[^*]+\*\*)/g).map((part, index) => {
-			// If part is surrounded by **, return it in a bold span
-			if (/^\*\*(.*)\*\*$/.test(part)) {
-			  return <span key={index} style={{ fontWeight: 'bold' }}>{part.slice(2, -2)}</span>;
-			}
-			// Otherwise, return the part as is
-			return part;
-		  });
-	  
-		  return (
-			<div key={pIndex}>
-			  <p>{parts}</p>
-			  {pIndex < paragraphs.length - 1 && <><br/></>} {/* Add breaks except after the last paragraph */}
-			</div>
-		  );
+			const parts = processText(paragraph, pIndex);
+
+			return (
+				<div key={pIndex}>
+					<p>{parts}</p>
+					{pIndex < paragraphs.length - 1 && <><br/></>} {/* Add breaks except after the last paragraph */}
+				</div>
+			);
 		});
-	  
+
 		return paragraphElements;
 	}
 	return (
