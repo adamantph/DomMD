@@ -41,6 +41,7 @@ const Chat = () => {
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setMessage(event.target.value);
+		scrollToLast();
 	};
 
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -98,13 +99,17 @@ const Chat = () => {
 		setChatDisabled(false);
 	};
 
+	useEffect(() => {
+		scrollToLast();
+	},[messages]);
+
 	function formatTextToJSXParagraphs(inputText: string) {
 		const paragraphs = inputText.split('\n');
 
 		// Function to process text for bold and italics
 		const processText = (text : string, key : any) => {
 			// Split the text by ** for bold and * for italics
-			return text.split(/(\*\*[^*]+\*\*)|(\*[^*]+\*)/g).map((part, index) => {
+			return text.split(/(\*\*[^*]+\*\*)|(\*[^*]+\*)|(_[^_]+_)/g).map((part, index) => {
 				if (!part) return null; // Filter out empty strings
 				// Check for bold text surrounded by **
 				if (/^\*\*(.*)\*\*$/.test(part)) {
@@ -112,8 +117,13 @@ const Chat = () => {
 				}
 				// Check for italic text surrounded by *
 				if (/^\*(.*)\*$/.test(part)) {
-					return <span key={`${key}-i-${index}`} style={{ fontStyle: 'italic' }}>{part.slice(1, -1)}</span>;
+					return <span key={`${key}-i-${index}`} style={{ fontStyle: 'italic',fontWeight: '600'  }}>{part.slice(1, -1)}</span>;
 				}
+				// Check for italic text surrounded by _
+				if (/^_(.*)_$/g.test(part)) {
+					return <span key={`${key}-i-${index}`} style={{ textDecoration: 'underline',}}>{part.slice(1, -1)}</span>;
+				  }
+				  
 				// Return the text as is if it's not bold or italic
 				return part;
 			});
@@ -141,7 +151,7 @@ const Chat = () => {
 						{messages.map((message, index) => (
 							<div key={index} className={style[`chat_${message.sender}`]}>
 								<div className={style.chat_bubble}>
-									<p>{formatTextToJSXParagraphs(message.message)}</p>
+									{formatTextToJSXParagraphs(message.message)}
 								</div>
 							</div>
 						))}
