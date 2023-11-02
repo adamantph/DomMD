@@ -50,7 +50,7 @@
 
 .chat_wrapper {
     height: 100%;
-    /* overflow-y: auto; */
+    overflow-y: auto;
 }
 
 .chat_assistant {
@@ -89,4 +89,25 @@
     padding: 10px;
     border-radius: 8px;
     max-width: 800px;
+}
+
+/* This styles the scrollbar track */
+.chat_wrapper::-webkit-scrollbar-track {
+    background-color: #f5f5f500;
+    /* color of the tracking area */
+}
+
+/* This styles the scrollbar thumb (the part that you drag) */
+.chat_wrapper::-webkit-scrollbar-thumb {
+    background-color: rgb(13, 37, 63);
+    /* color of the scroll thumb */
+    border-radius: 10px;
+    /* roundness of the scroll thumb */
+    /* creates a border around the scroll thumb */
+}
+
+/* This styles the scrollbar itself (including the thumb, track, and buttons) */
+.chat_wrapper::-webkit-scrollbar {
+    width: 12px;
+    /* width of the entire scrollbar */
 }

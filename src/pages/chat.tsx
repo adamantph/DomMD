@@ -121,7 +121,7 @@ const Chat = () => {
 				}
 				// Check for italic text surrounded by _
 				if (/^_(.*)_$/g.test(part)) {
-					return <span key={`${key}-i-${index}`} style={{ textDecoration: 'underline',}}>{part.slice(1, -1)}</span>;
+					return <span key={`${key}-i-${index}`} style={{ fontWeight: 'bold',}}>{part.slice(1, -1)}</span>;
 				  }
 				  
 				// Return the text as is if it's not bold or italic
