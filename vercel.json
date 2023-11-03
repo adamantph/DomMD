@@ -1,7 +1,11 @@
 {
     "version": 2,
     "functions" : {
-        "api/chat": {
+        "api/*.ts": {
+          "memory": 1024,
+          "maxDuration": 30
+        },
+        "api/*.js": {
           "memory": 1024,
           "maxDuration": 30
         }
