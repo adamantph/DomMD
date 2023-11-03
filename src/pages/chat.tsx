@@ -101,13 +101,13 @@ const Chat = () => {
 
 	useEffect(() => {
 		scrollToLast();
-	},[messages]);
+	}, [messages]);
 
 	function formatTextToJSXParagraphs(inputText: string) {
 		const paragraphs = inputText.split('\n');
 
 		// Function to process text for bold and italics
-		const processText = (text : string, key : any) => {
+		const processText = (text: string, key: any) => {
 			// Split the text by ** for bold and * for italics
 			return text.split(/(\*\*[^*]+\*\*)|(\*[^*]+\*)|(_[^_]+_)/g).map((part, index) => {
 				if (!part) return null; // Filter out empty strings
@@ -117,13 +117,13 @@ const Chat = () => {
 				}
 				// Check for italic text surrounded by *
 				if (/^\*(.*)\*$/.test(part)) {
-					return <span key={`${key}-i-${index}`} style={{ fontStyle: 'italic',fontWeight: '600'  }}>{part.slice(1, -1)}</span>;
+					return <span key={`${key}-i-${index}`} style={{ fontStyle: 'italic', fontWeight: '600' }}>{part.slice(1, -1)}</span>;
 				}
 				// Check for italic text surrounded by _
 				if (/^_(.*)_$/g.test(part)) {
-					return <span key={`${key}-i-${index}`} style={{ fontWeight: 'bold',}}>{part.slice(1, -1)}</span>;
-				  }
-				  
+					return <span key={`${key}-i-${index}`} style={{ fontWeight: 'bold', }}>{part.slice(1, -1)}</span>;
+				}
+
 				// Return the text as is if it's not bold or italic
 				return part;
 			});
@@ -134,9 +134,9 @@ const Chat = () => {
 			const parts = processText(paragraph, pIndex);
 
 			return (
-				<div key={pIndex}>
+				<div key={pIndex} className={style.chat_bubble_text}>
 					<p>{parts}</p>
-					{pIndex < paragraphs.length - 1 && <><br/></>} {/* Add breaks except after the last paragraph */}
+					{pIndex < paragraphs.length - 1 && <><br /></>} {/* Add breaks except after the last paragraph */}
 				</div>
 			);
 		});
@@ -155,6 +155,9 @@ const Chat = () => {
 								</div>
 							</div>
 						))}
+
+						{/* This empty div is used as a marker for the last child to enable scrolling */}
+						<div id="lastChild"></div>
 					</div>
 				</div>
 				<form onSubmit={handleSubmit} className={style.chat_input}>
