@@ -50,23 +50,33 @@ const ChatHistory = () => {
             </div>
         ));
     }
+    const getHistory = () => {
+        try{
+
+            return Object.entries(chatHistory).map(([key, value]) => (
+                <div key={key} className={style.conversation_container}>
+                    <p>Conversation ID {key}</p>
+                    { getMessages(JSON.stringify(value))}
+                    {/* { JSON.stringify(value)} */}
+                    {/* {value.map(item => (
+                        <div key={item.id}>
+                            <h2>{item.name}</h2>
+                            <p>Age: {item.age}</p>
+                            <p>Country: {item.country}</p>
+                        </div>
+                    ))} */}
+                </div>
+            ))
+        }
+        catch(err){
+            return "";
+        }
+    }
+    
     return (
         <Page>
             <div className={style.history_container}>
-                {Object.entries(chatHistory).map(([key, value]) => (
-                    <div key={key} className={style.conversation_container}>
-                        <p>Conversation ID {key}</p>
-                        { getMessages(JSON.stringify(value))}
-                        {/* { JSON.stringify(value)} */}
-                        {/* {value.map(item => (
-                            <div key={item.id}>
-                                <h2>{item.name}</h2>
-                                <p>Age: {item.age}</p>
-                                <p>Country: {item.country}</p>
-                            </div>
-                        ))} */}
-                    </div>
-                ))}
+                {getHistory()}
             </div>
         </Page>
     );
