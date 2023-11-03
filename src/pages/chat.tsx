@@ -104,7 +104,11 @@ const Chat = () => {
 	}, [messages]);
 
 	function formatTextToJSXParagraphs(inputText: string) {
-		const paragraphs = inputText.split('\n');
+		// Remove HTML tags and <> symbols
+		const sanitizedInput = inputText.replace(/<\/?[^>]+(>|$)/g, "");
+	  
+		const paragraphs = sanitizedInput.split('\n');
+	  
 
 		// Function to process text for bold and italics
 		const processText = (text: string, key: any) => {
@@ -136,7 +140,7 @@ const Chat = () => {
 			return (
 				<div key={pIndex} className={style.chat_bubble_text}>
 					<p>{parts}</p>
-					{pIndex < paragraphs.length - 1 && <><br /></>} {/* Add breaks except after the last paragraph */}
+					{pIndex < paragraphs.length - 1 && <></>} {/* Add breaks except after the last paragraph */}
 				</div>
 			);
 		});
