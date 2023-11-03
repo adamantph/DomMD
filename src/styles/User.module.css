@@ -1,0 +1,66 @@
+
+.user_container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    overflow: hidden;
+    top: 0;
+    z-index: 999;
+    padding: 20px;
+}
+.user_wrapper{
+    width: 90%;
+    max-width: 700px;
+    min-width: 400px;
+    background-color: white;
+    padding: 20px 40px;
+}
+.user_hr{
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    margin: 5px 0px 25px 0px;
+}
+.user_title{
+    font-size: 1.8em;
+    margin: 0;
+}
+.user_label{
+    font-size: 0.8em;
+    color: rgb(152, 152, 152);
+    margin-top: 10px;
+}
+.user_data{
+    font-size: 1em;
+    border: 0;
+    /* border : 1px solid black; */
+    outline: none;
+    width: 100%;
+}
+.conversation_container{
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgb(194, 194, 194);
+    margin: 10px;
+}
+.message_container{
+    width: 600px;
+    padding: 10px;
+}
+.message_timestamp{
+    font-size: 12px;
+    color: rgb(125, 125, 125);
+}
+.message_from{
+    font-size: 14px;
+}
+.message_sender{
+    font-weight: 800;
+}
+.message_content{
+    padding: 0px 20px;
+}
