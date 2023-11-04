@@ -3,11 +3,11 @@
     "functions": {
         "src/pages/api/*.ts": {
             "memory": 1024,
-            "maxDuration": 30
+            "maxDuration":100
         },
         "src/pages/api/*.js": {
             "memory": 1024,
-            "maxDuration": 30
+            "maxDuration": 100
         }
     }
   }
