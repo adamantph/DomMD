@@ -12,6 +12,7 @@ const ChatHistory = () => {
         content: string;
     };
     const [chatHistory, setChatHistory] = useState([]);
+    const [conversationToggle, setConversationToggle] = useState<boolean[]>([]);
 
     const { data, status } = useSession();
     useEffect(() => {
@@ -33,12 +34,26 @@ const ChatHistory = () => {
                 const result = await response.json();
                 console.log(result.conversations)
                 setChatHistory(result.conversations)
+                setConversationToggle(result.conversations.map(() => false))
             }
         }
         getConversations();
 
     }, [data])
 
+    const updateIndex = (index: number) => {
+        setConversationToggle(currentArray => {
+          // Create a new array with all the same values as the current one
+          let updatedArray = [...currentArray];
+          
+          // Update the value at the specific index
+          updatedArray[index] = !updatedArray[index];
+          
+          // Return the new array to update the state
+          return updatedArray;
+        });
+      };
+      
     const getMessages = (messages: string) => {
         let messagesObject = JSON.parse(messages);
 
@@ -51,34 +66,31 @@ const ChatHistory = () => {
         ));
     }
     const getHistory = () => {
-        try{
+        try {
 
-            // return Object.entries(chatHistory).map(([key, value]:any) => (
-            //     <div key={key} className={style.conversation_container_closed}>
-            //         <p>Conversation ID {value}</p>
-            //         { getMessages(JSON.stringify(value))}
-            //         {/* { JSON.stringify(value)} */}
-            //         {/* {value.map(item => (
-            //             <div key={item.id}>
-            //                 <h2>{item.name}</h2>
-            //                 <p>Age: {item.age}</p>
-            //                 <p>Country: {item.country}</p>
-            //             </div>
-            //         ))} */}
-            //     </div>
-            // ))
             return chatHistory.map((conversation: any, index: any) => (
-                <div key={index} className={style.conversation_container}>
-                    <p>Conversation ID {conversation.id}</p>
-                    { getMessages(conversation.messages)}
+                <div key={index} className={conversationToggle[index] ? style.conversation_container : style.conversation_container_closed}>
+                    <div className={style.conversation_header}>
+                        <div>
+
+                            <p className={style.conversation_title}>{conversation.title ? conversation.title : "Unnamed conversation"}</p>
+                            <p className={style.conversation_sub_title}><span>{conversation.id}</span>|<span>{conversation.dateadded}</span></p>
+                        </div>
+                        <div className={style.conversation_actions}>
+                            <button title='View messages' onClick={() => updateIndex(index)}>V</button>
+                            <button title='Rename this conversation'>R</button>
+                            <button title='Continue this conversation' onClick={() => router.push(`/chat/${conversation.id}`)}>C</button>
+                        </div>
+                    </div>
+                    {getMessages(conversation.messages)}
                 </div>
             ));
         }
-        catch(err){
+        catch (err) {
             return "";
         }
     }
-    
+
     return (
         <Page>
             <div className={style.history_container}>

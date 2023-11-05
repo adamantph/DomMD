@@ -1,9 +1,9 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
-import Page from '../layouts/page';
-import style from "../styles/Chat.module.css";
+import Page from '../../layouts/page';
+import style from "../../styles/Chat.module.css";
 import 'tailwindcss/tailwind.css';
 import { useSession } from 'next-auth/react';
-import router from 'next/router';
+import router, { useRouter } from 'next/router';
 
 const Chat = () => {
 	// Generate a unique conversationID if not already set
@@ -11,6 +11,8 @@ const Chat = () => {
 	const [userEmail, setUserEmail] = useState('');
 
 	const { data, status } = useSession();
+	const router = useRouter();
+    const { convoID } = router.query;
 
 	useEffect(() => {
 		if (status !== 'authenticated') {

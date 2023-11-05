@@ -9,26 +9,57 @@
     justify-content: flex-start;
     flex-direction: column;
     overflow: auto;
+    overflow-x: hidden;
     top: 0;
     z-index: 999;
     padding: 20px;
+    transition: 0.5s;
 }
 .conversation_container{
-    padding: 10px;
+    padding: 10px 15px;
     border-radius: 10px;
     background-color: rgb(194, 194, 194);
     margin: 10px;
+    transition: 0.5s;
+    width: 100%;
+    max-width: 600px;
 }
 .conversation_container_closed{
-    padding: 10px;
+    padding: 10px 15px;
     border-radius: 10px;
     background-color: rgb(194, 194, 194);
     margin: 10px;
-    height: 80px;
+    min-height: 60px;
+        height: 60px;
     overflow: hidden;
+    transition: 0.5s;
+    width: 100%;
+    max-width: 600px;
+}
+.conversation_header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.conversation_actions{
+
+}
+.conversation_actions button{
+    background-color: rgb(13, 37, 63);
+    padding: 5px 10px;
+    color: white;
+    margin-left: 5px;
+    border-radius: 5px;
+}
+.conversation_title{
+    font-weight: 600;
+}
+.conversation_sub_title{
+    font-size: 0.6em;
 }
 .message_container{
-    width: 600px;
+    width: 100%;
     padding: 10px;
 }
 .message_timestamp{
