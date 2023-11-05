@@ -35,13 +35,7 @@ export default async function handler(request, response) {
                             content: message
                         }
                     ]
-                    await sql`insert into conversations (id,messages,dateadded) values (${convoID},${JSON.stringify(newMessage)},${dateStored})`;
-
-                    //Get current list of conversations from the user and add new convo
-                    const user = await sql`SELECT conversations FROM users WHERE email = ${userEmail}`;
-                    let currentConversations = JSON.parse(user.rows[0].conversations);
-                    currentConversations.push(convoID)
-                    await sql`UPDATE users SET conversations= ${JSON.stringify(currentConversations)} WHERE email = ${userEmail}`;
+                    await sql`insert into conversations (id,messages,dateadded,createdby) values (${convoID},${JSON.stringify(newMessage)},${dateStored},${userEmail})`;
 
                     console.log("Conversation ID : ", convoID)
                     return response.status(200).json({ convoID });

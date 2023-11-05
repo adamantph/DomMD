@@ -47,18 +47,6 @@ const Chat = () => {
 		event.preventDefault();
 		setChatDisabled(true);
 
-		// Fetch the chat history for the given conversationID and userEmail
-		// const chatHistoryResponse = await fetch(`/api/fetchChatHistory`, {
-		// 	method: 'POST',
-		// 	headers: { 'Content-Type': 'application/json' },
-		// 	body: JSON.stringify({ userEmail, conversationID }),
-		// });
-		// const chatHistoryData = await chatHistoryResponse.json();
-		// const previousMessages = chatHistoryData && Array.isArray(chatHistoryData.history) ? chatHistoryData.history : [];
-
-		// Concatenate chat history with the current message
-		// const fullMessage = previousMessages.map((msg: messageFormat) => `${msg.sender}: ${msg.message}`).join('\n') + `${message}`;
-
 		// Add user query messages
 		setMessages((prevMessages) => [...prevMessages, { sender: "user", message }]);
 		setMessages((prevMessages) => [...prevMessages, { sender: "load", message: 'AskDom is thinking ...' }]);
