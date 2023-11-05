@@ -22,7 +22,7 @@ function convertToMessagesArray(inputArray: [], fullMessage: string) {
 	// Insert the system message at the start
 	messages.unshift({
 		role: 'system',
-		content: 'You are a medical assistant chatbot designed to gather patient history and provide potential diagnoses. Please add italics tags for medical terms such as diseases and the such.'
+		content: 'You are a medical assistant chatbot designed to gather patient history and provide potential diagnoses. Please add ** tags for medical terms such as diseases and the such.'
 	});
 
 	// Append the user message at the end
@@ -39,20 +39,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 
 	const { message, messages, userEmail, conversationID } = req.body;
-	console.log(messages, message)
+	// console.log(messages, message)
 	// Input validation
 	if (typeof message !== 'string' || message.trim() === '') {
 		return res.status(400).json({ message: 'Invalid input: message must be a non-empty string' });
 	}
 
 	// Fetch recent chat history
-	const user = await sql`SELECT * FROM users WHERE email = ${userEmail}`;
-	const prevHistory = user.rows[0].chathistory;
-	const chatHistoryForConversation = (prevHistory && prevHistory[conversationID]) ? prevHistory[conversationID] : [];
+	// const user = await sql`SELECT * FROM users WHERE email = ${userEmail}`;
+	// const prevHistory = user.rows[0].chathistory;
+	// const chatHistoryForConversation = (prevHistory && prevHistory[conversationID]) ? prevHistory[conversationID] : [];
 
-	// Ensure chatHistoryForConversation is an array and has the expected structure
-	const validHistory = Array.isArray(chatHistoryForConversation) ? chatHistoryForConversation : [];
-	const fullMessage = validHistory.map(row => `${row.from || 'Unknown'}: ${row.content || ''}`).join('\n') + `${message}`;
+	// // Ensure chatHistoryForConversation is an array and has the expected structure
+	// const validHistory = Array.isArray(chatHistoryForConversation) ? chatHistoryForConversation : [];
+	// const fullMessage = validHistory.map(row => `${row.from || 'Unknown'}: ${row.content || ''}`).join('\n') + `${message}`;
 
 	try {
 		// Make a request to the OpenAI GPT API to generate the response
@@ -65,7 +65,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 				//   { role: 'user', content: fullMessage },
 				//   { role: 'assistant', content: 'Hello! How can I assist you today? Please describe your symptoms or concerns.' },
 				// ],
-				messages: convertToMessagesArray(messages, message)
+				messages: convertToMessagesArray(messages, message),
 			},
 			{
 				headers: {
@@ -76,6 +76,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 		);
 
 		const { choices } = response.data;
+		// response.choices[0].message['content']
+		// console.log(choices[0].message['content'])
 		const chatbotResponse = choices[0]?.message?.content?.trim() || '';
 
 		// Extract diagnoses, treatments, and recommended doctors from the chatbot response

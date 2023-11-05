@@ -7,12 +7,11 @@ import router from 'next/router';
 
 const Chat = () => {
 	// Generate a unique conversationID if not already set
-	const [conversationID, setConversationID] = useState(() => {
-		return Math.random().toString(36).substr(2, 9);
-	});
+	const [conversationID, setConversationID] = useState('');
 	const [userEmail, setUserEmail] = useState('');
 
 	const { data, status } = useSession();
+
 	useEffect(() => {
 		if (status !== 'authenticated') {
 			router.push('/');
@@ -49,28 +48,31 @@ const Chat = () => {
 		setChatDisabled(true);
 
 		// Fetch the chat history for the given conversationID and userEmail
-		const chatHistoryResponse = await fetch(`/api/fetchChatHistory`, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ userEmail, conversationID }),
-		});
-		const chatHistoryData = await chatHistoryResponse.json();
-		const previousMessages = chatHistoryData && Array.isArray(chatHistoryData.history) ? chatHistoryData.history : [];
+		// const chatHistoryResponse = await fetch(`/api/fetchChatHistory`, {
+		// 	method: 'POST',
+		// 	headers: { 'Content-Type': 'application/json' },
+		// 	body: JSON.stringify({ userEmail, conversationID }),
+		// });
+		// const chatHistoryData = await chatHistoryResponse.json();
+		// const previousMessages = chatHistoryData && Array.isArray(chatHistoryData.history) ? chatHistoryData.history : [];
 
 		// Concatenate chat history with the current message
-		const fullMessage = previousMessages.map((msg: messageFormat) => `${msg.sender}: ${msg.message}`).join('\n') + `${message}`;
+		// const fullMessage = previousMessages.map((msg: messageFormat) => `${msg.sender}: ${msg.message}`).join('\n') + `${message}`;
 
 		// Add user query messages
-		setMessages((prevMessages) => [...prevMessages, { sender: "user", message: fullMessage }]);
+		setMessages((prevMessages) => [...prevMessages, { sender: "user", message }]);
 		setMessages((prevMessages) => [...prevMessages, { sender: "load", message: 'AskDom is thinking ...' }]);
 
+		// console.log(messages)
 		// Store the user's message
-		fetch(`/api/storeMessage`, {
+		const convoID = await fetch(`/api/storeMessage`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ userEmail, sender: "user", message: fullMessage, conversationID }),
+			body: JSON.stringify({ userEmail, sender: "user", message: message, conversationID }),
 		});
-
+		const result = await convoID.json();
+		setConversationID(result.convoID)
+		console.log(result.currentMessages)
 		scrollToLast();
 		setMessage('');
 
@@ -79,7 +81,7 @@ const Chat = () => {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ userEmail, message: fullMessage, messages: messages }),  // Use the concatenated message
+			body: JSON.stringify({ userEmail, message: message, messages: messages }),  // Use the concatenated message
 		});
 
 		const data = await response.json();
@@ -92,7 +94,7 @@ const Chat = () => {
 		fetch(`/api/storeMessage`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ userEmail, sender: "assistant", message: data.response, conversationID }),
+			body: JSON.stringify({ userEmail, sender: "assistant", message: data.response, conversationID : result.convoID }),
 		});
 
 		scrollToLast();
@@ -140,7 +142,7 @@ const Chat = () => {
 			return (
 				<div key={pIndex} className={style.chat_bubble_text}>
 					<p>{parts}</p>
-					{pIndex < paragraphs.length - 1 && <></>} {/* Add breaks except after the last paragraph */}
+					{pIndex < paragraphs.length - 1 && <><br /></>} {/* Add breaks except after the last paragraph */}
 				</div>
 			);
 		});
@@ -194,7 +196,9 @@ const Chat = () => {
 								</button>
 							</>
 					}
+					
 				</form>
+				<p className={style.chat_id}>Conversation ID : {conversationID}</p>
 			</div>
 		</Page>
 	);

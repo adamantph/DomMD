@@ -54,7 +54,7 @@ const ChatHistory = () => {
         try{
 
             return Object.entries(chatHistory).map(([key, value]) => (
-                <div key={key} className={style.conversation_container}>
+                <div key={key} className={style.conversation_container_closed}>
                     <p>Conversation ID {key}</p>
                     { getMessages(JSON.stringify(value))}
                     {/* { JSON.stringify(value)} */}

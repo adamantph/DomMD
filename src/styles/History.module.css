@@ -18,6 +18,14 @@
     background-color: rgb(194, 194, 194);
     margin: 10px;
 }
+.conversation_container_closed{
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgb(194, 194, 194);
+    margin: 10px;
+    height: 80px;
+    overflow: hidden;
+}
 .message_container{
     width: 600px;
     padding: 10px;

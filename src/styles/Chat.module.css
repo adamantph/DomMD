@@ -13,6 +13,10 @@
     position: relative;
 }
 
+.chat_id{
+    font-size: 0.7em;
+    margin-bottom: 5px;
+}
 .chat_input {
     width: 100%;
     font-family: 'Montserrat', sans-serif;
@@ -41,7 +45,7 @@
 .chat_container {
     width: 100%;
     /* height: 100%; */
-    max-height: 75vh;
+    max-height: 72vh;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
