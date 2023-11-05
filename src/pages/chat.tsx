@@ -60,7 +60,6 @@ const Chat = () => {
 		});
 		const result = await convoID.json();
 		setConversationID(result.convoID)
-		console.log(result.currentMessages)
 		scrollToLast();
 		setMessage('');
 

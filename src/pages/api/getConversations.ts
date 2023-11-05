@@ -6,19 +6,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { userEmail, conversationID } = req.body;
-
-  // Input validation
-  if (!userEmail || !conversationID) {
-    return res.status(400).json({ message: 'Invalid input: userEmail and conversationID are required' });
-  }
-
+  const { email} = req.body;
   try {
-    // Fetch chat history for the given userEmail and conversationID from the database
-    const user = await sql`SELECT * FROM users WHERE email = ${userEmail}`;
-    const chatHistoryForConversation = (user.rows[0].chathistory && user.rows[0].chathistory[conversationID]) ? user.rows[0].chathistory[conversationID] : [];
+    // Fetch conversations created by the user
+    const conversations = await sql`SELECT * FROM conversations WHERE createdby = ${email}`;
 
-    return res.status(200).json({ history: chatHistoryForConversation });
+    return res.status(200).json({ conversations : conversations.rows });
   } catch (error: any) {
     console.error('Error fetching chat history:', error);
     return res.status(500).json({ message: `Error fetching chat history: ${error.message}` });

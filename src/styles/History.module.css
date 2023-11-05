@@ -2,12 +2,13 @@
 .history_container {
     width: 100%;
     height: 100%;
+    max-height: 82vh;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
-    overflow: hidden;
+    overflow: auto;
     top: 0;
     z-index: 999;
     padding: 20px;
@@ -42,4 +43,24 @@
 }
 .message_content{
     padding: 0px 20px;
+}
+/* This styles the scrollbar track */
+.history_container::-webkit-scrollbar-track {
+    background-color: #f5f5f500;
+    /* color of the tracking area */
+}
+
+/* This styles the scrollbar thumb (the part that you drag) */
+.history_container::-webkit-scrollbar-thumb {
+    background-color: rgb(13, 37, 63);
+    /* color of the scroll thumb */
+    border-radius: 10px;
+    /* roundness of the scroll thumb */
+    /* creates a border around the scroll thumb */
+}
+
+/* This styles the scrollbar itself (including the thumb, track, and buttons) */
+.history_container::-webkit-scrollbar {
+    width: 12px;
+    /* width of the entire scrollbar */
 }

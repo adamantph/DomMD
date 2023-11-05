@@ -11,7 +11,7 @@ const ChatHistory = () => {
         from: string;
         content: string;
     };
-    const [chatHistory, setChatHistory] = useState({});
+    const [chatHistory, setChatHistory] = useState([]);
 
     const { data, status } = useSession();
     useEffect(() => {
@@ -20,22 +20,22 @@ const ChatHistory = () => {
         }
     })
 
-    //Set conversationID and user's Email
+    //Get conversations
     useEffect(() => {
-        const getUser = async () => {
+        const getConversations = async () => {
             if (data?.user?.email) {
 
-                const response = await fetch(`/api/getuser`, {
+                const response = await fetch(`/api/getConversations`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: data.user.email }),
                 })
                 const result = await response.json();
-                // console.log(result.user.rows[0].chathistory)
-                setChatHistory(JSON.parse(result.user.rows[0].chathistory))
+                console.log(result.conversations)
+                setChatHistory(result.conversations)
             }
         }
-        getUser();
+        getConversations();
 
     }, [data])
 
@@ -53,20 +53,26 @@ const ChatHistory = () => {
     const getHistory = () => {
         try{
 
-            return Object.entries(chatHistory).map(([key, value]) => (
-                <div key={key} className={style.conversation_container_closed}>
-                    <p>Conversation ID {key}</p>
-                    { getMessages(JSON.stringify(value))}
-                    {/* { JSON.stringify(value)} */}
-                    {/* {value.map(item => (
-                        <div key={item.id}>
-                            <h2>{item.name}</h2>
-                            <p>Age: {item.age}</p>
-                            <p>Country: {item.country}</p>
-                        </div>
-                    ))} */}
+            // return Object.entries(chatHistory).map(([key, value]:any) => (
+            //     <div key={key} className={style.conversation_container_closed}>
+            //         <p>Conversation ID {value}</p>
+            //         { getMessages(JSON.stringify(value))}
+            //         {/* { JSON.stringify(value)} */}
+            //         {/* {value.map(item => (
+            //             <div key={item.id}>
+            //                 <h2>{item.name}</h2>
+            //                 <p>Age: {item.age}</p>
+            //                 <p>Country: {item.country}</p>
+            //             </div>
+            //         ))} */}
+            //     </div>
+            // ))
+            return chatHistory.map((conversation: any, index: any) => (
+                <div key={index} className={style.conversation_container}>
+                    <p>Conversation ID {conversation.id}</p>
+                    { getMessages(conversation.messages)}
                 </div>
-            ))
+            ));
         }
         catch(err){
             return "";
