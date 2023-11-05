@@ -35,9 +35,14 @@ export default async function handler(request, response) {
                             content: message
                         }
                     ]
-
                     await sql`insert into conversations (id,messages,dateadded) values (${convoID},${JSON.stringify(newMessage)},${dateStored})`;
-                    // await sql`UPDATE conversations SET messages = ${newMessage},dateadded = ${dateStored} WHERE id = ${conversationID}`;
+
+                    //Get current list of conversations from the user and add new convo
+                    const user = await sql`SELECT conversations FROM users WHERE email = ${userEmail}`;
+                    let currentConversations = JSON.parse(user.rows[0].conversations);
+                    currentConversations.push(convoID)
+                    await sql`UPDATE users SET conversations= ${JSON.stringify(currentConversations)} WHERE email = ${userEmail}`;
+
                     console.log("Conversation ID : ", convoID)
                     return response.status(200).json({ convoID });
                 }
@@ -61,7 +66,7 @@ export default async function handler(request, response) {
             // await sql`insert into conversations (id,messages,dateadded) values (${convoID},${JSON.stringify(newMessage)},${dateStored})`;
             await sql`UPDATE conversations SET messages = ${JSON.stringify(currentMessages)} WHERE id = ${conversationID}`;
             console.log("Conversation ID : ", conversationID)
-            return response.status(200).json({ convoID: conversationID});
+            return response.status(200).json({ convoID: conversationID });
         }
 
         // while (conversationExistence) {
